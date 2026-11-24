@@ -1,0 +1,22 @@
+DECIZII DE PROIECTARE
+
+1. Harta de memorie
+- EPROM 2x27C512 = 128 KB la E0000H-FFFFFH. La reset 8086 pornește de la FFFF0H, deci codul de pornire trebuie să fie în memorie nevolatilă, în zona de sus.
+- SRAM 2x62256 = 64 KB la 00000H-0FFFFH. Tabela vectorilor de întrerupere (00000H-003FFH) trebuie să fie în memorie scriabilă, deci jos.
+- Câte 2 cipuri pe fiecare memorie: banca pară (D0-D7, A0=0) și banca impară (D8-D15, BHE=0).
+
+2. Harta de I/O
+- 8251: 05D0H-05D2H (S1 pe 0) sau 07D0H-07D2H (S1 pe 1).
+- 8255: 0A50H-0A56H (S2 pe 0) sau 0B50H-0B56H (S2 pe 1).
+- Adresele sunt pare: ambele circuite sunt pe D0-D7 (banca pară, A0=0).
+
+3. Comutatoarele S1 și S2
+- Cele două variante de adresă ale 8251 diferă doar prin A9 (0200H), cele ale 8255 doar prin A8 (0100H).
+- S1 stabilește valoarea așteptată pentru A9, S2 pentru A8, comparate cu liniile de adresă printr-o poartă XOR. Schimbarea comutatorului mută circuitul fără schimbarea schemei.
+
+4. Liniile de I/O
+- 8255: PA (ieșire) = date DB25; PB (intrare) = BUSY, ACK; PC jos (intrare) = rânduri tastatură; PC sus (ieșire) = coloane tastatură și STROBE.
+- 24 de linii nu ajung pentru 14 LED-uri, 6 ranguri, segmente și LCD, deci porturi suplimentare cu 74LS273 la adrese I/O libere: 2 pentru LED-uri, 1 pentru segmente și date LCD, 1 pentru selecția rangurilor, RS și E.
+
+5. Interfața LCD
+- 8 biți prin portul suplimentar, R/W la GND, E comandat din software, fără citirea busy flag (întârzieri software).
