@@ -1,0 +1,37 @@
+DECODOR MEMORIE: 74LS138 (U15)
+C=A19, B=A18, A=A17
+G1=M/IO, G2A=G2B=GND
+Iesiri active pe 0
+
+M/IO A19 A18 A17 | Y0 Y7
+ 0    x   x   x   | 1  1
+ 1    0   0   0   | 0  1
+ 1    1   1   1   | 1  0
+ 1    alta comb.  | 1  1
+(Y1..Y6 neconectate)
+
+SRAM_SEL = Y0 OR A16
+ Y0 A16 | SRAM_SEL
+ 0  0   | 0 (00000H-0FFFFH)
+ 0  1   | 1 (10000H-1FFFFH, nimic)
+ 1  x   | 1
+
+Banca (A0 si BHE):
+ BHE A0 | acces
+ 0   0  | cuvant 16 biti (2 banci)
+ 0   1  | octet impar (D8-D15)
+ 1   0  | octet par (D0-D7)
+ 1   1  | niciunul
+
+Selectii (active pe 0):
+ CS_SRAM_P  = SRAM_SEL OR A0
+ CS_SRAM_I  = SRAM_SEL OR BHE
+ CS_EPROM_P = Y7 OR A0
+ CS_EPROM_I = Y7 OR BHE
+
+Porti OR 74LS32:
+ U16: Y0+A16 -> SRAM_SEL
+      SRAM_SEL+A0 -> CS_SRAM_P
+      SRAM_SEL+BHE -> CS_SRAM_I
+      Y7+A0 -> CS_EPROM_P
+ U17: Y7+BHE -> CS_EPROM_I

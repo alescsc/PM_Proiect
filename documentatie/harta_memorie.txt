@@ -1,0 +1,28 @@
+HARTA DE MEMORIE (spatiu 1 MB, 20 biti)
+
+00000H-003FFH  tabela vectorilor INT
+00000H-0FFFFH  SRAM 64 KB (2 x 62256)
+10000H-DFFFFH  nefolosit
+E0000H-FFFFFH  EPROM 128 KB (2 x 27C512)
+FFFF0H         adresa de reset
+               (CS=FFFFH, IP=0000H)
+
+Fiecare memorie are 2 cipuri:
+ - banca para: D0-D7, A0=0
+ - banca impara: D8-D15, BHE=0
+
+Adrese interne ale cipurilor:
+ 62256: A0-A14 <- A1-A15
+ 27C512: A0-A15 <- A1-A16
+
+Biti de adresa:
+ SRAM:  A19..A16 = 0000
+ EPROM: A19..A17 = 111
+ 00000H = 0000 0000 0000 0000 0000
+ 0FFFFH = 0000 1111 1111 1111 1111
+ E0000H = 1110 0000 0000 0000 0000
+ FFFFFH = 1111 1111 1111 1111 1111
+
+Vectori INT: tip n la adresa n x 4
+ INT 08H la 00020H
+ INT 21H la 00084H
